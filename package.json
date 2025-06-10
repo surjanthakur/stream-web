@@ -1,13 +1,16 @@
 {
+  "engines": {
+    "node": "v20.18.0"
+  },
   "name": "zoom-clone",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "surjanthakur",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "test": "echo \"error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@barba/core": "^2.10.3",
