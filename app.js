@@ -90,7 +90,7 @@ app.use((req, res, next) => {
 
 // ======= Routes =======
 app.use("/", authRoutes);
-app.use("/", mainRoutes);
+app.use(mainRoutes);
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
