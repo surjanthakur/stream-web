@@ -9,10 +9,7 @@ logs
 *.log
 npm-debug.log*
 
-# OS specific files
-.DS_Store
-Thumbs.db
-
+**/.Ds_store
 # Optional: build or dist folders
 dist/
 build/
