@@ -6,11 +6,16 @@
     <li><i class="fa-solid fa-xmark close-icon sidebar-overlay" id="sidebarOverlay" onclick="hideSidebar()"></i>
     </li>
     <li><a href="/" onclick="hideSidebar()"><i class="fa-solid fa-house"></i> Home</a></li>
-    <!-- Demo authentication states - replace with your EJS logic -->
-    <li><a href="/signup" onclick="hideSidebar()">Signup</a></li>
-    <li><a href="/login" onclick="hideSidebar()">Login</a></li>
-    <li><a href="/meeting-code" onclick="hideSidebar()">Create/Join Meeting</a></li>
-    <li><a href="/meeting-code" onclick="hideSidebar()">Join as Guest</a></li>
+    <%if(!isAuthenticated){%>
+      <li><a href="/signup" onclick="hideSidebar()">Signup</a></li>
+      <li><a href="/login" onclick="hideSidebar()">Login</a></li>
+      <li><a href="/meetingId" onclick="hideSidebar()">Join as Guest</a></li>
+      <%}%>
+
+        <%if(isAuthenticated) {%>
+          <li><a href="/meetingId" onclick="hideSidebar()">Create/Join Meeting</a></li>
+          <li><a href="/logout">logout</a></li>
+          <% }%>
   </ul>
 
   <!-- Top Navbar -->
@@ -19,13 +24,13 @@
     <%if(!isAuthenticated){%>
       <li class="hideOnMobile"><a href="/signup">Signup</a></li>
       <li class="hideOnMobile nav-link no-barba"><a href="/login">Login</a></li>
+      <li class="hideOnMobile"><a href="/meetingId">Join as Guest</a></li>
       <%}%>
 
         <%if(isAuthenticated) {%>
-          <li class="hideOnMobile"><a href="/meeting-code">Create/Join Meeting</a></li>
+          <li class="hideOnMobile"><a href="/meetingId">Create/Join Meeting</a></li>
           <li class="hideOnMobile"><a href="/logout">logout</a></li>
           <% }%>
-            <li class="hideOnMobile"><a href="/meeting-code">Join as Guest</a></li>
             <li class="menu-button" onclick="showSidebar()"><i class="fa-solid fa-bars"></i></li>
   </ul>
 </nav>
