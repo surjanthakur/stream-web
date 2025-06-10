@@ -14,8 +14,22 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const flash = require("connect-flash");
 const connectToSocket = require("./controller/socketManager.js");
+const MongoStore = require("connect-mongo");
+
+const store = MongoStore.create({
+  mongoUrl: process.env.MONGO_DB_STORE,
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", () => {
+  console.log("error in mongo store !");
+});
 
 const sessionOption = {
+  store,
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
