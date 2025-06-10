@@ -1,0 +1,197 @@
+<% layout('layouts/boilerplate') %>
+  <div class="container">
+    <form class="meeting-form" method="POST" action="/meeting-code">
+      <input type="text" name="meetingCode" placeholder="Enter the meeting ID / Name" class="input-field" required>
+      <button class="add-button" type="submit">Add</button>
+    </form>
+  </div>
+
+
+  <button class="toggle-btn" onclick="toggleHistory()"><i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting
+    History</button>
+
+  <div id="historyContainer" class="history-container">
+    <%for (history of meetingHistory) {%>
+      <div class="history">
+        <p>
+          <%=history.meetingCode%>
+        </p>
+        <p>
+          <%=history.date%>
+        </p>
+      </div>
+      <%}%>
+
+  </div>
+
+  <style>
+    .toggle-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      margin-left: 670px;
+      transition: background-color 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .toggle-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .toggle-btn:active {
+      transform: translateY(1px);
+    }
+
+    .history-container {
+      max-width: max-content;
+      max-height: max-content;
+      overflow: hidden;
+      margin-left: 80px;
+      transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+      opacity: 0;
+      margin-top: 15px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .history-container.show {
+      max-height: max-content;
+      opacity: 1;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .history {
+      display: inline-block;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .history:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .history:last-child {
+      margin-bottom: 0;
+    }
+
+    .history p {
+      margin: 0;
+      padding: 4px 0;
+    }
+
+    .history p:first-child {
+      font-weight: bold;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .history p:last-child {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .no-history {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      padding: 20px;
+    }
+
+
+
+    /* Container Styles */
+    .container {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Styles */
+    .meeting-form {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-field {
+      width: calc(100% - 80px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    .add-button {
+      width: 60px;
+      padding: 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .add-button:hover {
+      background-color: #0069d9;
+    }
+
+    /* Responsive Styles for Mobile */
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .meeting-form {
+        flex-direction: column;
+      }
+
+      .input-field {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .add-button {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <script>
+    let isHistoryVisible = false;
+
+    function toggleHistory() {
+      const container = document.getElementById('historyContainer');
+      const button = document.querySelector('.toggle-btn');
+
+      if (isHistoryVisible) {
+        // Hide history
+        container.classList.remove('show');
+        button.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting History';
+        isHistoryVisible = false;
+      } else {
+        // Show history
+        container.classList.add('show');
+        button.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>&nbsp;Hide Meeting History';
+        isHistoryVisible = true;
+      }
+    }
+  </script>

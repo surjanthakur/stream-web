@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="/nav.css">
+<nav class="custom-navbar">
+  <!-- Mobile Sidebar -->
+  <ul class="sidebar" id="mobileSidebar">
+    <li><i class="fa-solid fa-xmark close-icon sidebar-overlay" id="sidebarOverlay" onclick="hideSidebar()"></i>
+    </li>
+    <li><a href="/" onclick="hideSidebar()"><i class="fa-solid fa-house"></i> Home</a></li>
+    <!-- Demo authentication states - replace with your EJS logic -->
+    <li><a href="/signup" onclick="hideSidebar()">Signup</a></li>
+    <li><a href="/login" onclick="hideSidebar()">Login</a></li>
+    <li><a href="/meeting-code" onclick="hideSidebar()">Create/Join Meeting</a></li>
+    <li><a href="/meeting-code" onclick="hideSidebar()">Join as Guest</a></li>
+  </ul>
+
+  <!-- Top Navbar -->
+  <ul class="main-nav">
+    <li><a href="/"><i class="fa-solid fa-house"></i></a></li>
+    <%if(!isAuthenticated){%>
+      <li class="hideOnMobile"><a href="/signup">Signup</a></li>
+      <li class="hideOnMobile nav-link no-barba"><a href="/login">Login</a></li>
+      <%}%>
+
+        <%if(isAuthenticated) {%>
+          <li class="hideOnMobile"><a href="/meeting-code">Create/Join Meeting</a></li>
+          <li class="hideOnMobile"><a href="/logout">logout</a></li>
+          <% }%>
+            <li class="hideOnMobile"><a href="/meeting-code">Join as Guest</a></li>
+            <li class="menu-button" onclick="showSidebar()"><i class="fa-solid fa-bars"></i></li>
+  </ul>
+</nav>
+
+
+<script>
+  const sidebar = document.getElementById("mobileSidebar");
+  // const overlay = document.getElementById("sidebarOverlay");
+
+  function showSidebar() {
+    sidebar.classList.add("active");
+    // overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function hideSidebar() {
+    sidebar.classList.remove("active");
+    // overlay.classList.remove("active");
+    document.body.style.overflow = "auto";
+  }
+
+  // Close sidebar when clicking outside
+  document.addEventListener('click', function (event) {
+    if (!sidebar.contains(event.target) && !event.target.closest('.menu-button')) {
+      hideSidebar();
+    }
+  });
+
+  // Handle keyboard navigation
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && sidebar.classList.contains('active')) {
+      hideSidebar();
+    }
+  });
+
+  // Handle window resize
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 768 && sidebar.classList.contains('active')) {
+      hideSidebar();
+    }
+  });
+</script>
