@@ -61,8 +61,7 @@ exports.handleLogin = (req, res, next) => {
         return next(err);
       }
       req.flash("success", "Successfully logged in!");
-      let redirect = res.locals.redirectUrl || "/";
-      res.redirect(redirect);
+      res.redirect("/");
     });
   })(req, res, next);
 };
@@ -81,8 +80,7 @@ exports.googleOneTapAuth = (req, res, next) => {
         return res.redirect("/login");
       }
       req.flash("success", "Successfully logged in with Google!");
-      const redirect = res.locals.redirectUrl || "/";
-      res.redirect(redirect);
+      res.redirect("/");
     });
   })(req, res, next);
 };
