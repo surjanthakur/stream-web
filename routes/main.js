@@ -1,28 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const JoinMeeting = require("../models/joinmetting");
-const wrapAsync = require("../middlewares/wrapAsync");
 
 router.get("/", (req, res) => {
   res.render("homepage.ejs");
 });
 
-router.get("/meetingId", wrapAsync, async (req, res, next) => {
+router.get("/meetingId", async (req, res) => {
   const meetingHistory = await JoinMeeting.find({});
   res.render("get-meeting.ejs", { meetingHistory });
 });
 
-router.post("/meetingId", wrapAsync, async (req, res, next) => {
+router.post("/meetingId", async (req, res) => {
   const { meetingCode } = req.body;
   let newMeetingCode = new JoinMeeting({
     meetingCode: meetingCode,
   });
   await newMeetingCode.save();
   console.log(`meetingcode: ${newMeetingCode}`);
-  res.redirect(`/videocall/${meetingCode}`);
+  res.redirect(`/${meetingCode}`);
 });
 
-router.get("/videocall/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   res.render("video-stream.ejs");
 });
 
