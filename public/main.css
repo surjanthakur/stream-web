@@ -18,33 +18,3 @@ body {
   font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
 }
-
-.loader-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(255, 255, 255, 0.052);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  display: none;
-  transition: opacity 0.3s ease;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 5px solid #000000;
-  border-top: 5px solid black;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}

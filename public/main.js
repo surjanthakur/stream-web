@@ -21,30 +21,28 @@
   });
 })();
 
-// main.js
-
-// Loader control
-function showLoader() {
-  const loader = document.getElementById("globalLoader");
-  if (loader) loader.style.display = "flex";
-}
-function hideLoader() {
-  const loader = document.getElementById("globalLoader");
-  if (loader) loader.style.display = "none";
-}
-
-// Barba init
 barba.init({
   transitions: [
     {
-      name: "page-transition",
+      name: "fade",
       async leave(data) {
-        showLoader();
-        await new Promise((resolve) => setTimeout(resolve, 500)); // Delay if needed
-        data.current.container.remove();
+        await gsap.to(data.current.container, {
+          opacity: 0,
+          duration: 0.5,
+        });
       },
-      async enter() {
-        hideLoader();
+      enter(data) {
+        window.scrollTo(0, 0); // Optional: scroll to top on page enter
+        gsap.from(data.next.container, {
+          opacity: 0,
+          duration: 0.5,
+        });
+      },
+      once(data) {
+        gsap.from(data.next.container, {
+          opacity: 0,
+          duration: 0.5,
+        });
       },
     },
   ],
