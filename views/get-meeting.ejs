@@ -6,25 +6,78 @@
     </form>
   </div>
 
-
-  <button class="toggle-btn" onclick="toggleHistory()"><i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting
-    History</button>
+  <div class="button-container">
+    <button class="toggle-btn" onclick="toggleHistory()">
+      <i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting History
+    </button>
+  </div>
 
   <div id="historyContainer" class="history-container">
-    <%for (history of meetingHistory) {%>
-      <div class="history">
-        <p>
-          <%=history.meetingCode%>
-        </p>
-        <p>
-          <%=history.date%>
-        </p>
-      </div>
-      <%}%>
-
+    <div class="history">
+    </div>
   </div>
 
   <style>
+    /* Container Styles */
+    .container {
+      max-width: 400px;
+      margin: 0 auto 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Styles */
+    .meeting-form {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #007bff;
+    }
+
+    .add-button {
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .add-button:hover {
+      background-color: #0056b3;
+    }
+
+    .add-button:active {
+      transform: translateY(1px);
+    }
+
+    /* Button Container */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
     .toggle-btn {
       background-color: #007bff;
       color: white;
@@ -34,8 +87,7 @@
       cursor: pointer;
       font-size: 16px;
       font-weight: 500;
-      margin-left: 670px;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s ease, transform 0.1s ease;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
@@ -47,39 +99,39 @@
       transform: translateY(1px);
     }
 
+    /* History Container */
     .history-container {
-      max-width: max-content;
-      max-height: max-content;
+      max-width: 600px;
+      margin: 0 auto;
+      max-height: 0;
       overflow: hidden;
-      margin-left: 80px;
-      transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+      transition: max-height 0.4s ease-in-out, opacity 0.3s ease, padding 0.3s ease;
       opacity: 0;
-      margin-top: 15px;
       background-color: white;
-      border-radius: 8px;
+      border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .history-container.show {
-      max-height: max-content;
+      max-height: 500px;
       opacity: 1;
       padding: 20px;
       border: 1px solid #e0e0e0;
     }
 
     .history {
-      display: inline-block;
       background-color: #f8f9fa;
       border: 1px solid #dee2e6;
-      border-radius: 6px;
-      padding: 15px;
+      border-radius: 8px;
+      padding: 16px;
       margin-bottom: 12px;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
     }
 
     .history:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
 
     .history:last-child {
@@ -92,7 +144,7 @@
     }
 
     .history p:first-child {
-      font-weight: bold;
+      font-weight: 600;
       color: #333;
       font-size: 16px;
     }
@@ -102,75 +154,172 @@
       font-size: 14px;
     }
 
-    .no-history {
-      text-align: center;
-      color: #666;
-      font-style: italic;
-      padding: 20px;
-    }
-
-
-
-    /* Container Styles */
-    .container {
-      max-width: 400px;
-      margin: 40px auto;
-      padding: 20px;
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Form Styles */
-    .meeting-form {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .input-field {
-      width: calc(100% - 80px);
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-
-    .add-button {
-      width: 60px;
-      padding: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .add-button:hover {
-      background-color: #0069d9;
-    }
-
-    /* Responsive Styles for Mobile */
+    /* Responsive Styles */
     @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
       .container {
-        margin: 20px auto;
+        margin-bottom: 25px;
+        padding: 16px;
+      }
+
+      .toggle-btn {
+        padding: 10px 20px;
+        font-size: 15px;
+      }
+
+      .history-container {
+        max-width: 100%;
+      }
+
+      .history-container.show {
+        padding: 16px;
       }
     }
 
     @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        max-width: 100%;
+        margin-bottom: 20px;
+        padding: 16px;
+      }
+
       .meeting-form {
         flex-direction: column;
+        gap: 12px;
       }
 
       .input-field {
         width: 100%;
-        margin-bottom: 10px;
+        padding: 14px 16px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
       }
 
       .add-button {
         width: 100%;
+        padding: 14px;
+        font-size: 16px;
+      }
+
+      .toggle-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .history {
+        padding: 14px;
+      }
+
+      .history p:first-child {
+        font-size: 15px;
+      }
+
+      .history p:last-child {
+        font-size: 13px;
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 320px) {
+      .container {
+        padding: 12px;
+      }
+
+      .input-field,
+      .add-button {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .toggle-btn {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+
+      .history {
+        padding: 12px;
+      }
+    }
+
+    /* Landscape orientation on mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .meeting-form {
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .input-field {
+        flex: 1;
+      }
+
+      .add-button {
+        width: auto;
+        padding: 12px 20px;
+      }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+
+      .history-container,
+      .container {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+      }
+
+      .container,
+      .history-container {
+        background-color: #2d2d2d;
+        border-color: #404040;
+      }
+
+      .input-field {
+        background-color: #3a3a3a;
+        border-color: #555555;
+        color: #ffffff;
+      }
+
+      .input-field:focus {
+        border-color: #0084ff;
+      }
+
+      .history {
+        background-color: #3a3a3a;
+        border-color: #555555;
+      }
+
+      .history p:first-child {
+        color: #ffffff;
+      }
+
+      .history p:last-child {
+        color: #cccccc;
       }
     }
   </style>
@@ -194,4 +343,23 @@
         isHistoryVisible = true;
       }
     }
+
+    // Improve accessibility
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.querySelector('.toggle-btn');
+      const historyContainer = document.getElementById('historyContainer');
+
+      // Add ARIA attributes
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-controls', 'historyContainer');
+      historyContainer.setAttribute('aria-hidden', 'true');
+
+      // Update ARIA attributes when toggling
+      const originalToggle = window.toggleHistory;
+      window.toggleHistory = function () {
+        originalToggle();
+        toggleBtn.setAttribute('aria-expanded', isHistoryVisible.toString());
+        historyContainer.setAttribute('aria-hidden', (!isHistoryVisible).toString());
+      };
+    });
   </script>

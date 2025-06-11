@@ -41,7 +41,7 @@ const sessionOption = {
 };
 
 // Importing routes
-const authRoutes = require("./routes/user.js");
+const authRoutes = require("./routes/authUser.js");
 const mainRoutes = require("./routes/main.js");
 
 const app = express();

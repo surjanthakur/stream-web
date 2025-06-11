@@ -4,17 +4,11 @@
   --secondary-color: #16213e;
   --accent-color: #e94560;
   --success-color: #0f3460;
-  --text-light: #ffffff;
-  --text-muted: #b0b0b0;
-  --gradient-primary: linear-gradient(
-    135deg,
-    #1a1a2e 0%,
-    #16213e 50%,
-    #0f3460 100%
-  );
+  --text-light: #333333; /* Changed to dark for white background */
+  --text-muted: #666666; /* Changed to darker for white background */
   --gradient-accent: linear-gradient(45deg, #e94560, #ff6b86);
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.4);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Lighter shadow for white background */
+  --shadow-hover: 0 20px 40px rgba(0, 0, 0, 0.15); /* Lighter shadow for white background */
   --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   --border-radius: 16px;
   --spacing-sm: 8px;
@@ -24,68 +18,24 @@
   --spacing-xxl: 48px;
 }
 
-body {
-  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: var(--gradient-primary);
-  color: var(--text-light);
-  line-height: 1.6;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-
 /* Hero Wrapper */
 .hero-wrapper {
-  min-height: 100vh;
+  height: 100vh; /* Changed from min-height to fixed height */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--spacing-lg);
   position: relative;
-  background: var(--gradient-primary);
+  overflow: hidden; /* Prevent scrolling beyond content */
 }
 
-/* Animated background elements */
+/* Removed animated background elements since we want white background */
 .hero-wrapper::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-      circle at 20% 80%,
-      rgba(233, 69, 96, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(15, 52, 96, 0.1) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 40% 40%,
-      rgba(22, 33, 62, 0.1) 0%,
-      transparent 50%
-    );
-  animation: backgroundFloat 20s ease-in-out infinite;
-  pointer-events: none;
+  display: none; /* Removed animated background */
 }
 
 .hero-wrapper::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(233, 69, 96, 0.03) 50%,
-    transparent 70%
-  );
-  animation: rotateBackground 30s linear infinite;
-  pointer-events: none;
+  display: none; /* Removed animated background */
 }
 
 /* Hero Content */
@@ -215,7 +165,7 @@ body {
 
 .btn-primary {
   background: var(--gradient-accent);
-  color: var(--text-light);
+  color: #ffffff; /* Keep button text white */
   border: 2px solid transparent;
 }
 
@@ -250,28 +200,6 @@ body {
 }
 
 /* Animations */
-@keyframes backgroundFloat {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  33% {
-    transform: translateY(-20px) rotate(1deg);
-  }
-  66% {
-    transform: translateY(10px) rotate(-1deg);
-  }
-}
-
-@keyframes rotateBackground {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 @keyframes floatIn {
   0% {
     opacity: 0;
@@ -327,6 +255,11 @@ body {
 }
 
 @media (max-width: 768px) {
+  .hero-wrapper {
+    height: auto; /* Allow natural height on mobile */
+    min-height: 100vh; /* But ensure it's at least full height */
+  }
+
   .hero-content {
     grid-template-columns: 1fr;
     text-align: center;
@@ -363,6 +296,8 @@ body {
 @media (max-width: 480px) {
   .hero-wrapper {
     padding: var(--spacing-md);
+    height: auto; /* Allow natural height on small mobile */
+    min-height: 100vh;
   }
 
   .text-container h3 {
@@ -384,7 +319,7 @@ body {
 /* Landscape orientation adjustments */
 @media (orientation: landscape) and (max-height: 600px) {
   .hero-wrapper {
-    min-height: auto;
+    height: auto; /* Allow natural height in landscape */
     padding: var(--spacing-md);
   }
 
@@ -412,9 +347,9 @@ body {
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   :root {
-    --text-light: #ffffff;
+    --text-light: #000000;
     --accent-color: #ff4757;
-    --primary-color: #000000;
+    --primary-color: #ffffff;
   }
 
   .btn-primary {
@@ -431,11 +366,6 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-
-  .hero-wrapper::before,
-  .hero-wrapper::after {
-    animation: none;
   }
 }
 
@@ -461,8 +391,8 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
+    rgba(0, 0, 0, 0.05),
+    /* Adjusted for white background */ transparent
   );
   animation: shimmer 2s infinite;
 }

@@ -15,4 +15,6 @@ body {
   width: 100%;
   background: var(--gradient-primary);
   scroll-behavior: smooth;
+  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
 }
