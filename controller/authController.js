@@ -1,8 +1,6 @@
 const User = require("../models/user");
 const passport = require("passport");
 require("dotenv").config();
-const GoogleOneTapStrategy =
-  require("passport-google-one-tap").GoogleOneTapStrategy;
 const Schema = require("../middlewares/joivalidation");
 
 // =============== Validation Middleware ===============
@@ -51,49 +49,34 @@ exports.handleLogin = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       console.error("Authentication error:", err);
-      return next(err);
+      req.flash(
+        "error",
+        "An error occurred during authentication. Please try again."
+      );
+      return res.redirect("/login");
     }
+
     if (!user) {
-      req.flash("error", info.message || "Invalid credentials");
+      // Set flash message and redirect
+      req.flash("error", info.message || "Invalid username or password");
       return res.redirect("/login");
     }
 
     req.logIn(user, (err) => {
       if (err) {
         console.error("Login session error:", err);
-        return next(err);
-      }
-      req.flash("success", "Successfully logged in!");
-      res.redirect("/");
-    });
-  })(req, res, next);
-};
-
-// =============== Google One Tap Handler ===============
-exports.googleOneTapAuth = (req, res, next) => {
-  passport.authenticate("google-one-tap", (err, user, info) => {
-    if (err) {
-      req.flash("error", "Google authentication failed.");
-      return res.redirect("/login");
-    }
-
-    if (!user) {
-      req.flash("error", "Google authentication failed. Please try again.");
-      return res.redirect("/signup");
-    }
-
-    req.logIn(user, (err) => {
-      if (err) {
-        console.error("Google login session error:", err);
-        req.flash("error", "Login failed. Please try again.");
+        req.flash(
+          "error",
+          "An error occurred while logging in. Please try again."
+        );
         return res.redirect("/login");
       }
-      req.flash("success", "Successfully signed up with Google and logged in!");
+
+      req.flash("success", "You have been successfully logged in.");
       return res.redirect("/");
     });
   })(req, res, next);
 };
-
 // =============== Logout Handler ===============
 exports.handleLogout = (req, res, next) => {
   req.logout((err) => {

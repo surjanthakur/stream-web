@@ -1,261 +1,169 @@
-<!-- Enhanced Toast Container with Bootstrap Integration -->
-<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+<!-- Toast Container (Hidden initially, revealed after 3s) -->
+<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3 d-none"
+  style="z-index: 1080; max-width: max-content;">
 
   <!-- Success Toast -->
   <% if (success_msg && success_msg.length> 0) { %>
     <div class="toast custom-toast success-toast align-items-center border-0 shadow-lg" role="alert"
       aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
-
-      <!-- Toast Body -->
       <div class="toast-body flex-grow-1 pe-3">
         <div class="fw-semibold text-success-emphasis mb-1 fs-6">Success!</div>
-        <div class="text-success-emphasis fs-6 lh-sm ">
+        <div class="text-success-emphasis fs-6 lh-sm">
           <%= success_msg %>
         </div>
       </div>
-
-      <!-- Close Button -->
-      <button type="button" class="btn-close btn-close-sm ms-2 flex-shrink-0" data-bs-dismiss="toast"
-        aria-label="Close">
-      </button>
-    </div>
-</div>
-<% } %>
-
-  <!-- Error Toast -->
-  <% if (error_msg && error_msg.length> 0) { %>
-    <div class="toast custom-toast error-toast align-items-center border-0 shadow-lg" role="alert" aria-live="assertive"
-      aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
-      <!-- Toast Body -->
-      <div class="toast-body flex-grow-1 pe-3">
-        <div class="fw-semibold text-danger-emphasis mb-1 fs-6">Error!</div>
-        <div class="text-danger-emphasis fs-6 lh-sm">
-          <%= error_msg %>
-        </div>
-      </div>
-
-      <!-- Close Button -->
-      <button type="button" class="btn-close btn-close-sm ms-2 flex-shrink-0" data-bs-dismiss="toast"
-        aria-label="Close">
-      </button>
-    </div>
     </div>
     <% } %>
-      </div>
 
-      <!-- Enhanced JavaScript with Bootstrap Toast Integration -->
-      <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          // Initialize all Bootstrap toasts
-          const toastElements = document.querySelectorAll('.toast');
-          const toasts = [...toastElements].map(toastEl => {
-            const toast = new bootstrap.Toast(toastEl, {
-              animation: true,
-              autohide: true,
-              delay: toastEl.classList.contains('error-toast') ? 5000 : 4000
-            });
+      <!-- Error Toast -->
+      <% if (error_msg && error_msg.length> 0) { %>
+        <div class="toast custom-toast error-toast align-items-center border-0 shadow-lg" role="alert"
+          aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+          <div class="toast-body flex-grow-1 pe-3">
+            <div class="fw-semibold text-danger-emphasis mb-1 fs-6">Error!</div>
+            <div class="text-danger-emphasis fs-6 lh-sm">
+              <%= error_msg %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+</div>
 
-            // Show the toast
-            toast.show();
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      const container = document.getElementById('toast-container');
+      if (container) {
+        container.classList.remove('d-none');
 
-            return toast;
+        const toastElements = container.querySelectorAll('.toast');
+        toastElements.forEach((toastEl, index) => {
+          const toast = new bootstrap.Toast(toastEl, {
+            animation: true,
+            autohide: true,
+            delay: toastEl.classList.contains('error-toast') ? 1000 : 2000
           });
 
-          // Add smooth entrance animation
-          toastElements.forEach((toast, index) => {
-            toast.style.transform = 'translateX(100%)';
-            toast.style.opacity = '0';
+          // Animate entry
+          toastEl.style.transform = 'translateX(100%)';
+          toastEl.style.opacity = '0';
+          setTimeout(() => {
+            toastEl.style.transition = 'all 0.4s ease';
+            toastEl.style.transform = 'translateX(0)';
+            toastEl.style.opacity = '1';
+          }, 100);
 
-            setTimeout(() => {
-              toast.style.transition = 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-              toast.style.transform = 'translateX(0)';
-              toast.style.opacity = '1';
-            }, index * 150); // Stagger multiple toasts
-          });
+          toast.show();
 
-          // Add hover pause functionality
-          toastElements.forEach(toastEl => {
-            const toast = bootstrap.Toast.getInstance(toastEl);
-            let isPaused = false;
-
-            toastEl.addEventListener('mouseenter', () => {
-              if (!isPaused) {
-                toast._config.autohide = false;
-                isPaused = true;
-              }
-            });
-
-            toastEl.addEventListener('mouseleave', () => {
-              if (isPaused) {
-                toast._config.autohide = true;
-                isPaused = false;
-                // Restart auto-hide timer
-                setTimeout(() => toast.hide(), 1000);
-              }
-            });
-          });
-
-          // Progress bar animation (optional enhancement)
-          toastElements.forEach(toastEl => {
-            const progressBar = document.createElement('div');
-            progressBar.className = 'toast-progress';
-            toastEl.appendChild(progressBar);
-
-            const duration = toastEl.classList.contains('error-toast') ? 5000 : 4000;
-            progressBar.style.animationDuration = duration + 'ms';
-          });
+          // Add progress bar
+          const progressBar = document.createElement('div');
+          progressBar.className = 'toast-progress';
+          progressBar.style.animationDuration = (toastEl.classList.contains('error-toast') ? 1000 : 2000) + 'ms';
+          toastEl.appendChild(progressBar);
         });
-      </script>
+      }
+    }, 3000); // Unhide after 3 seconds
+  });
+</script>
 
-      <!-- Enhanced CSS with Bootstrap Integration and Responsiveness -->
-      <style>
-        /* Toast Container Responsive Positioning */
-        .toast-container {
-          max-width: 420px;
-          width: 100%;
-        }
+<style>
+  .toast-container {
+    max-width: max-content;
+  }
 
-        @media (max-width: 576px) {
-          .toast-container {
-            top: 10px !important;
-            right: 10px !important;
-            left: 10px !important;
-            max-width: none;
-            padding: 0.75rem !important;
-          }
-        }
+  @media (max-width: 576px) {
+    .toast-container {
+      left: 10px !important;
+      right: 10px !important;
+      max-width: max-content !important;
+    }
 
-        /* Custom Toast Styling */
-        .custom-toast {
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(10px);
-          border-radius: 12px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          margin-bottom: 0.75rem;
-          min-width: 320px;
-          max-width: 100%;
-          position: relative;
-          overflow: hidden;
-        }
+    .custom-toast {
+      max-width: max-content;
+      margin-bottom: 0.5rem;
+    }
+  }
 
-        @media (max-width: 576px) {
-          .custom-toast {
-            min-width: unset;
-            margin-bottom: 0.5rem;
-          }
-        }
+  .custom-toast {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: none;
+    margin: 1rem 1rem 0.5rem 0 !important;
+    max-width: max-content;
+    position: relative;
+    overflow: hidden;
+  }
 
-        /* Success Toast Styling */
-        .success-toast {
-          border-left: 4px solid var(--bs-success);
-          background-color: rgba(49, 194, 49, 0.649);
-          color: white !important;
-          font-weight: 700;
-        }
+  .success-toast {
+    border-left: 4px solid var(--bs-success);
+    background-color: rgba(32, 227, 18, 0.8);
+    color: #fff !important;
+  }
 
-        /* Error Toast Styling */
-        .error-toast {
-          border-left: 4px solid var(--bs-danger);
-          background: linear-gradient(135deg,
-              rgba(220, 53, 70, 0.425) 0%,
-              rgba(220, 53, 70, 0.353) 100%);
-        }
+  .error-toast {
+    border-left: 4px solid var(--bs-danger);
+    background-color: rgb(240, 16, 38);
+    color: #fff !important;
+  }
 
-        /* Enhanced Close Button */
-        .custom-toast .btn-close {
-          background-size: 0.875em;
-          opacity: 0.7;
-          transition: all 0.2s ease;
-        }
+  .toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--bs-primary);
+    animation: progressShrink linear forwards;
+    border-radius: 0 0 12px 12px;
+  }
 
-        .custom-toast .btn-close:hover {
-          opacity: 1;
-          transform: scale(1.1);
-        }
+  .success-toast .toast-progress {
+    background: var(--bs-success);
+  }
 
-        /* Progress Bar Animation */
-        .toast-progress {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          height: 3px;
-          background: linear-gradient(90deg,
-              var(--bs-primary),
-              var(--bs-primary-subtle));
-          animation: progressShrink linear forwards;
-          border-radius: 0 0 12px 12px;
-        }
+  .error-toast .toast-progress {
+    background: var(--bs-danger);
+  }
 
-        .success-toast .toast-progress {
-          background: linear-gradient(90deg,
-              var(--bs-success),
-              var(--bs-success-subtle));
-        }
+  @keyframes progressShrink {
+    from {
+      width: 100%;
+    }
 
-        .error-toast .toast-progress {
-          background: linear-gradient(90deg,
-              var(--bs-danger),
-              var(--bs-danger-subtle));
-        }
+    to {
+      width: 0%;
+    }
+  }
 
-        @keyframes progressShrink {
-          from {
-            width: 100%;
-          }
+  .custom-toast:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+  }
 
-          to {
-            width: 0%;
-          }
-        }
+  .custom-toast .btn-close:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
 
-        /* Hover Effects */
-        .custom-toast:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
-          transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
+  .custom-toast:focus-within {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
 
-        .custom-toast:hover .toast-progress {
-          animation-play-state: paused;
-        }
+  @media (prefers-color-scheme: dark) {
+    .custom-toast {
+      background: rgba(33, 37, 41, 0.95);
+    }
 
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-          .custom-toast {
-            background: rgba(33, 37, 41, 0.95);
-            border-color: rgba(255, 255, 255, 0.1);
-          }
+    .success-toast {
+      color: white !important;
+      background-color: rgba(55, 238, 27, 0.8);
+    }
 
-          .success-toast {
-            background-color: rgba(44, 190, 44, 0.611);
-          }
-
-          .error-toast {
-            background: linear-gradient(135deg,
-                rgba(220, 53, 70, 0.348) 0%,
-                rgba(232, 39, 58, 0.386) 100%);
-          }
-        }
-
-        /* Accessibility Enhancements */
-        @media (prefers-reduced-motion: reduce) {
-          .custom-toast {
-            transition: none;
-          }
-
-          .toast-progress {
-            animation: none;
-          }
-        }
-
-        /* Multiple Toast Stacking */
-        .toast-container .toast+.toast {
-          margin-top: 0.5rem;
-        }
-
-        /* Focus States for Accessibility */
-        .custom-toast:focus-within {
-          outline: 2px solid var(--bs-primary);
-          outline-offset: 2px;
-        }
-      </style>
+    .error-toast {
+      color: white !important;
+      background-color: rgba(26, 244, 18, 0.8);
+    }
+  }
+</style>
