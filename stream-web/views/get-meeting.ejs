@@ -1,0 +1,365 @@
+<% layout('layouts/boilerplate') %>
+  <div class="container">
+    <form class="meeting-form" method="POST" action="/meetingId">
+      <input type="text" name="meetingCode" placeholder="Enter the meeting ID / Name" class="input-field" required>
+      <button class="add-button" type="submit">Add</button>
+    </form>
+  </div>
+
+  <div class="button-container">
+    <button class="toggle-btn" onclick="toggleHistory()">
+      <i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting History
+    </button>
+  </div>
+
+  <div id="historyContainer" class="history-container">
+    <div class="history">
+    </div>
+  </div>
+
+  <style>
+    /* Container Styles */
+    .container {
+      max-width: 400px;
+      margin: 0 auto 30px;
+      padding: 20px;
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Form Styles */
+    .meeting-form {
+      display: flex;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      outline: none;
+    }
+
+    .input-field:focus {
+      border-color: #007bff;
+    }
+
+    .add-button {
+      padding: 12px 20px;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      white-space: nowrap;
+    }
+
+    .add-button:hover {
+      background-color: #0056b3;
+    }
+
+    .add-button:active {
+      transform: translateY(1px);
+    }
+
+    /* Button Container */
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .toggle-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .toggle-btn:hover {
+      background-color: #0056b3;
+    }
+
+    .toggle-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* History Container */
+    .history-container {
+      max-width: 600px;
+      margin: 0 auto;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-in-out, opacity 0.3s ease, padding 0.3s ease;
+      opacity: 0;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .history-container.show {
+      max-height: 500px;
+      opacity: 1;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .history {
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+    }
+
+    .history:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .history:last-child {
+      margin-bottom: 0;
+    }
+
+    .history p {
+      margin: 0;
+      padding: 4px 0;
+    }
+
+    .history p:first-child {
+      font-weight: 600;
+      color: #333;
+      font-size: 16px;
+    }
+
+    .history p:last-child {
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 15px;
+      }
+
+      .container {
+        margin-bottom: 25px;
+        padding: 16px;
+      }
+
+      .toggle-btn {
+        padding: 10px 20px;
+        font-size: 15px;
+      }
+
+      .history-container {
+        max-width: 100%;
+      }
+
+      .history-container.show {
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .container {
+        max-width: 100%;
+        margin-bottom: 20px;
+        padding: 16px;
+      }
+
+      .meeting-form {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .input-field {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+      }
+
+      .add-button {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+      }
+
+      .toggle-btn {
+        padding: 12px 16px;
+        font-size: 14px;
+        width: 100%;
+        max-width: 280px;
+      }
+
+      .history {
+        padding: 14px;
+      }
+
+      .history p:first-child {
+        font-size: 15px;
+      }
+
+      .history p:last-child {
+        font-size: 13px;
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 320px) {
+      .container {
+        padding: 12px;
+      }
+
+      .input-field,
+      .add-button {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      .toggle-btn {
+        font-size: 13px;
+        padding: 10px 12px;
+      }
+
+      .history {
+        padding: 12px;
+      }
+    }
+
+    /* Landscape orientation on mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .meeting-form {
+        flex-direction: row;
+        gap: 12px;
+      }
+
+      .input-field {
+        flex: 1;
+      }
+
+      .add-button {
+        width: auto;
+        padding: 12px 20px;
+      }
+    }
+
+    /* High DPI displays */
+    @media (-webkit-min-device-pixel-ratio: 2),
+    (min-resolution: 192dpi) {
+
+      .history-container,
+      .container {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+      }
+    }
+
+    /* Accessibility improvements */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1a1a1a;
+        color: #ffffff;
+      }
+
+      .container,
+      .history-container {
+        background-color: #2d2d2d;
+        border-color: #404040;
+      }
+
+      .input-field {
+        background-color: #3a3a3a;
+        border-color: #555555;
+        color: #ffffff;
+      }
+
+      .input-field:focus {
+        border-color: #0084ff;
+      }
+
+      .history {
+        background-color: #3a3a3a;
+        border-color: #555555;
+      }
+
+      .history p:first-child {
+        color: #ffffff;
+      }
+
+      .history p:last-child {
+        color: #cccccc;
+      }
+    }
+  </style>
+
+  <script>
+    let isHistoryVisible = false;
+
+    function toggleHistory() {
+      const container = document.getElementById('historyContainer');
+      const button = document.querySelector('.toggle-btn');
+
+      if (isHistoryVisible) {
+        // Hide history
+        container.classList.remove('show');
+        button.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>&nbsp;See Meeting History';
+        isHistoryVisible = false;
+      } else {
+        // Show history
+        container.classList.add('show');
+        button.innerHTML = '<i class="fa-solid fa-clock-rotate-left"></i>&nbsp;Hide Meeting History';
+        isHistoryVisible = true;
+      }
+    }
+
+    // Improve accessibility
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.querySelector('.toggle-btn');
+      const historyContainer = document.getElementById('historyContainer');
+
+      // Add ARIA attributes
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-controls', 'historyContainer');
+      historyContainer.setAttribute('aria-hidden', 'true');
+
+      // Update ARIA attributes when toggling
+      const originalToggle = window.toggleHistory;
+      window.toggleHistory = function () {
+        originalToggle();
+        toggleBtn.setAttribute('aria-expanded', isHistoryVisible.toString());
+        historyContainer.setAttribute('aria-hidden', (!isHistoryVisible).toString());
+      };
+    });
+  </script>

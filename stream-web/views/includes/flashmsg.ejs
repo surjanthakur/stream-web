@@ -1,0 +1,169 @@
+<!-- Toast Container (Hidden initially, revealed after 3s) -->
+<div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3 d-none"
+  style="z-index: 1080; max-width: max-content;">
+
+  <!-- Success Toast -->
+  <% if (success_msg && success_msg.length> 0) { %>
+    <div class="toast custom-toast success-toast align-items-center border-0 shadow-lg" role="alert"
+      aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="4000">
+      <div class="toast-body flex-grow-1 pe-3">
+        <div class="fw-semibold text-success-emphasis mb-1 fs-6">Success!</div>
+        <div class="text-success-emphasis fs-6 lh-sm">
+          <%= success_msg %>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+      <!-- Error Toast -->
+      <% if (error_msg && error_msg.length> 0) { %>
+        <div class="toast custom-toast error-toast align-items-center border-0 shadow-lg" role="alert"
+          aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+          <div class="toast-body flex-grow-1 pe-3">
+            <div class="fw-semibold text-danger-emphasis mb-1 fs-6">Error!</div>
+            <div class="text-danger-emphasis fs-6 lh-sm">
+              <%= error_msg %>
+            </div>
+          </div>
+        </div>
+        <% } %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+      const container = document.getElementById('toast-container');
+      if (container) {
+        container.classList.remove('d-none');
+
+        const toastElements = container.querySelectorAll('.toast');
+        toastElements.forEach((toastEl, index) => {
+          const toast = new bootstrap.Toast(toastEl, {
+            animation: true,
+            autohide: true,
+            delay: toastEl.classList.contains('error-toast') ? 1000 : 2000
+          });
+
+          // Animate entry
+          toastEl.style.transform = 'translateX(100%)';
+          toastEl.style.opacity = '0';
+          setTimeout(() => {
+            toastEl.style.transition = 'all 0.4s ease';
+            toastEl.style.transform = 'translateX(0)';
+            toastEl.style.opacity = '1';
+          }, 100);
+
+          toast.show();
+
+          // Add progress bar
+          const progressBar = document.createElement('div');
+          progressBar.className = 'toast-progress';
+          progressBar.style.animationDuration = (toastEl.classList.contains('error-toast') ? 1000 : 2000) + 'ms';
+          toastEl.appendChild(progressBar);
+        });
+      }
+    }, 3000); // Unhide after 3 seconds
+  });
+</script>
+
+<style>
+  .toast-container {
+    max-width: max-content;
+  }
+
+  @media (max-width: 576px) {
+    .toast-container {
+      left: 10px !important;
+      right: 10px !important;
+      max-width: max-content !important;
+    }
+
+    .custom-toast {
+      max-width: max-content;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .custom-toast {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    border: none;
+    margin: 1rem 1rem 0.5rem 0 !important;
+    max-width: max-content;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .success-toast {
+    border-left: 4px solid var(--bs-success);
+    background-color: rgba(32, 227, 18, 0.8);
+    color: #fff !important;
+  }
+
+  .error-toast {
+    border-left: 4px solid var(--bs-danger);
+    background-color: rgb(240, 16, 38);
+    color: #fff !important;
+  }
+
+  .toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--bs-primary);
+    animation: progressShrink linear forwards;
+    border-radius: 0 0 12px 12px;
+  }
+
+  .success-toast .toast-progress {
+    background: var(--bs-success);
+  }
+
+  .error-toast .toast-progress {
+    background: var(--bs-danger);
+  }
+
+  @keyframes progressShrink {
+    from {
+      width: 100%;
+    }
+
+    to {
+      width: 0%;
+    }
+  }
+
+  .custom-toast:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .custom-toast .btn-close:hover {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+
+  .custom-toast:focus-within {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .custom-toast {
+      background: rgba(33, 37, 41, 0.95);
+    }
+
+    .success-toast {
+      color: white !important;
+      background-color: rgba(55, 238, 27, 0.8);
+    }
+
+    .error-toast {
+      color: white !important;
+      background-color: rgba(26, 244, 18, 0.8);
+    }
+  }
+</style>
