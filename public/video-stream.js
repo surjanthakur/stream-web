@@ -144,10 +144,26 @@ class VideoConferenceClient {
       console.log("Joining call with room ID:", this.roomId);
 
       this.hideLoading();
+
+      // Hide lobby and show meeting
+      this.showMeetingView();
     } catch (error) {
       console.error("Error joining meeting:", error);
       this.hideLoading();
       this.handleMediaError(error);
+    }
+  }
+
+  // Show meeting view and hide lobby
+  showMeetingView() {
+    const lobbySection = document.getElementById("lobbySection");
+    const meetingSection = document.getElementById("meetingSection");
+
+    if (lobbySection) {
+      lobbySection.style.display = "none";
+    }
+    if (meetingSection) {
+      meetingSection.style.display = "flex";
     }
   }
 
@@ -503,6 +519,13 @@ class VideoConferenceClient {
       } else {
         await this.stopScreenShare();
       }
+
+      // Update UI
+      const shareOn = document.querySelector(".share-on");
+      const shareOff = document.querySelector(".share-off");
+
+      if (shareOn) shareOn.classList.toggle("hidden", this.isScreenSharing);
+      if (shareOff) shareOff.classList.toggle("hidden", !this.isScreenSharing);
     } catch (error) {
       console.error("Error toggling screen share:", error);
       this.showError("Failed to toggle screen sharing");
@@ -782,31 +805,135 @@ class VideoConferenceClient {
 // Initialize the client
 const videoClient = new VideoConferenceClient();
 
-// Global functions for HTML buttons
+// FIXED: Global functions for HTML buttons with correct names matching HTML
+function handleJoinMeeting() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.joinMeeting) {
+      videoClient.joinMeeting();
+    } else {
+      console.error("Video client not initialized");
+      alert("Video client not ready. Please refresh the page.");
+    }
+  } catch (error) {
+    console.error("Error in handleJoinMeeting:", error);
+    alert("Failed to join meeting. Please try again.");
+  }
+}
+
+function handleToggleVideo() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.toggleVideo) {
+      videoClient.toggleVideo();
+    } else {
+      console.error("Video client not available");
+    }
+  } catch (error) {
+    console.error("Error in handleToggleVideo:", error);
+  }
+}
+
+function handleToggleAudio() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.toggleAudio) {
+      videoClient.toggleAudio();
+    } else {
+      console.error("Video client not available");
+    }
+  } catch (error) {
+    console.error("Error in handleToggleAudio:", error);
+  }
+}
+
+function handleToggleScreenShare() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.toggleScreenShare) {
+      videoClient.toggleScreenShare();
+    } else {
+      console.error("Video client not available");
+    }
+  } catch (error) {
+    console.error("Error in handleToggleScreenShare:", error);
+  }
+}
+
+function handleToggleChat() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.toggleChat) {
+      videoClient.toggleChat();
+    } else {
+      console.error("Video client not available");
+    }
+  } catch (error) {
+    console.error("Error in handleToggleChat:", error);
+  }
+}
+
+function handleSendMessage() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.sendMessage) {
+      videoClient.sendMessage();
+    } else {
+      console.error("Video client not available");
+    }
+  } catch (error) {
+    console.error("Error in handleSendMessage:", error);
+  }
+}
+
+function handleEndCall() {
+  try {
+    if (typeof videoClient !== "undefined" && videoClient.endCall) {
+      if (confirm("Are you sure you want to end the call?")) {
+        videoClient.endCall();
+      }
+    } else {
+      console.error("Video client not available");
+      // Fallback redirect
+      window.location.href = "/";
+    }
+  } catch (error) {
+    console.error("Error in handleEndCall:", error);
+    // Fallback redirect
+    window.location.href = "/";
+  }
+}
+
+function handleChatKeyPress(event) {
+  try {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSendMessage();
+    }
+  } catch (error) {
+    console.error("Error in handleChatKeyPress:", error);
+  }
+}
+
+// Legacy functions for backward compatibility (if needed)
 function joinMeeting() {
-  videoClient.joinMeeting();
+  return handleJoinMeeting();
 }
 
 function toggleVideo() {
-  videoClient.toggleVideo();
+  return handleToggleVideo();
 }
 
 function toggleAudio() {
-  videoClient.toggleAudio();
+  return handleToggleAudio();
 }
 
 function toggleScreenShare() {
-  videoClient.toggleScreenShare();
+  return handleToggleScreenShare();
 }
 
 function toggleChat() {
-  videoClient.toggleChat();
+  return handleToggleChat();
 }
 
 function sendMessage() {
-  videoClient.sendMessage();
+  return handleSendMessage();
 }
 
 function endCall() {
-  videoClient.endCall();
+  return handleEndCall();
 }
